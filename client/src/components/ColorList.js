@@ -10,6 +10,12 @@ const ColorList = props => {
   console.log(props)
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
+  const [newFriend, setNewFriend] = useState({
+    color: '',
+    code:{
+      hex:''
+    },
+  })
 
   const editColor = color => {
     setEditing(true);
@@ -36,7 +42,19 @@ const ColorList = props => {
       })
       .catch(err => console.log(err))
   };
-
+  const handleChanges = e => {
+    setNewFriend({
+        ...newFriend, [e.target.name]: e.target.value
+    })
+    console.log('new friend', newFriend)
+}
+  const handleSubmitColorFriend = e => {
+    e.preventDefault()
+    axiosWithAuth().post('/api/colors', newFriend)
+      .then(res => console.log(res))
+      .catch(err => console.log(err))
+      
+}
   return (
     <div className="colors-wrap">
       <p>colors</p>
@@ -60,6 +78,24 @@ const ColorList = props => {
           </li>
         ))}
       </ul>
+      <form onSubmit={(e => handleSubmitColorFriend(e))}>
+                <input
+                    type='text'
+                    name='color'
+                    value={newFriend.color}
+                    placeholder='Color'
+                    onChange={(e => handleChanges(e))}
+                />
+                
+                <input
+                    type='text'
+                    name='code'
+                    value={newFriend.code.hex}
+                    placeholder='hex'
+                    onChange={(e => handleChanges(e))}
+                />
+                <button>Add Friend</button>
+            </form>
       {editing && (
         <form onSubmit={saveEdit}>
           <legend>edit color</legend>
@@ -93,7 +129,7 @@ const ColorList = props => {
         </form>
       )}
       <div className="spacer" />
-      {/* stretch - build another form here to add a color */}
+      
     </div>
   );
 };
