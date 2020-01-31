@@ -53,7 +53,6 @@ const ColorList = props => {
     axiosWithAuth().post('/api/colors', newFriend)
       .then(res => console.log(res))
       .catch(err => console.log(err))
-      
 }
   return (
     <div className="colors-wrap">
