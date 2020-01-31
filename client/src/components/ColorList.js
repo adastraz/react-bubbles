@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {axiosWithAuth} from '../ultils/axiosWithAuth'
 const initialColor = {
@@ -8,9 +8,6 @@ const initialColor = {
 
 const ColorList = props => {
   console.log(props)
-  // const coolColor = props.colors.find(
-  //   thing => `${thing.id}` === props.colors.id
-  // )
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
 
@@ -25,6 +22,11 @@ const ColorList = props => {
     // Make a put request to save your updated color
     // think about where will you get the id from...
     // where is is saved right now?
+    axiosWithAuth().put(`/api/colors/${colorToEdit.id}`, colorToEdit)
+      .then(res => {
+        console.log(res)
+      })
+      .catch(err => console.log(err))
   };
 
   const deleteColor = color => {
@@ -32,6 +34,7 @@ const ColorList = props => {
       .then(res => {
         console.log(res)
       })
+      .catch(err => console.log(err))
   };
 
   return (
@@ -83,7 +86,9 @@ const ColorList = props => {
           </label>
           <div className="button-row">
             <button type="submit">save</button>
-            <button onClick={() => setEditing(false)}>cancel</button>
+            <button onClick={() => {
+              setEditing(false)
+              }}>cancel</button>
           </div>
         </form>
       )}
